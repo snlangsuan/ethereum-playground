@@ -1,0 +1,2 @@
+#!/bin/sh
+openssl req -x509 -nodes -days 365 -subj "/C=TH/ST=Nonthaburi/O=IT, Inc./CN=dev.localhost" -addext "subjectAltName=DNS:dev.localhost" -newkey rsa:2048 -keyout private/nginx-selfsigned.key -out certs/nginx-selfsigned.crt;

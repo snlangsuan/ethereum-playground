@@ -1,0 +1,99 @@
+version: '3'
+services:
+  eth-node-01:
+    build:
+      context: ./docker/node
+    container_name: eth-node-01
+    entrypoint: /root/start.sh
+    command: "--datadir=/root/.ethereum --nodekey /root/.ethereum/bootnode.key --nodiscover --networkid 1981 --syncmode full --http --http.addr 0.0.0.0 --http.vhosts=* --http.corsdomain=* --http.api eth,net,web3,personal --allow-insecure-unlock --cache=512  --verbosity 6"
+    volumes:
+      - ./data/.ethash:/root/.ethash
+      - ./data/node-01:/root/.ethereum
+      - ./genesis.json:/opt/genesis.json
+    ports:
+      - 30303:30303/udp
+      - 30303:30303/tcp
+      - 8545:8545
+    environment:
+      - TZ=Asia/Bangkok
+    networks:
+      privnet:
+        ipv4_address: 10.5.0.100
+    
+  eth-node-02:
+    build:
+      context: ./docker/node
+    container_name: eth-node-02
+    entrypoint: /root/start.sh
+    command: "--datadir=/root/.ethereum --bootnodes enode://8299cdb534231de1d01140b77984ab4b632be814ad68365db495d1a1c6cd30ab272e12dfd5bc52d2116754264730fa2eb0d78f6e54cded0687524f8e44376183@10.5.0.100:30303 --networkid 1981 --syncmode full --cache=512 --mine --miner.threads=1 --miner.gasprice 0 --miner.gaslimit 94000000 --unlock 0xd5209aac30af2a12055f8d2f567bdeac41fe4ec0 --password /opt/password.txt --verbosity 6"
+    volumes:
+      - ./data/.ethash:/root/.ethash
+      - ./data/node-02:/root/.ethereum
+      - ./genesis.json:/opt/genesis.json
+      - ./data/node-02/password.txt:/opt/password.txt
+    ports:
+      - 30311:30303
+    environment:
+      - TZ=Asia/Bangkok
+    networks:
+      - privnet
+
+  eth-node-03:
+    build:
+      context: ./docker/node
+    container_name: eth-node-03
+    entrypoint: /root/start.sh
+    command: "--datadir=/root/.ethereum --bootnodes enode://8299cdb534231de1d01140b77984ab4b632be814ad68365db495d1a1c6cd30ab272e12dfd5bc52d2116754264730fa2eb0d78f6e54cded0687524f8e44376183@10.5.0.100:30303 --networkid 1981 --syncmode full --cache=512 --mine --miner.threads=1 --miner.gasprice 0 --miner.gaslimit 94000000 --unlock 0xcf48e3fa7012cd14afccb5baa8501a3b0401732d --password /opt/password.txt --verbosity 6"
+    volumes:
+      - ./data/.ethash:/root/.ethash
+      - ./data/node-03:/root/.ethereum
+      - ./genesis.json:/opt/genesis.json
+      - ./data/node-03/password.txt:/opt/password.txt
+    ports:
+      - 30312:30303
+    environment:
+      - TZ=Asia/Bangkok
+    networks:
+      - privnet
+
+  nginx:
+    image: nginx:1.13.0-alpine
+    container_name: nginx
+    restart: always
+    depends_on:
+      - eth-explorer
+      - eth-node-01
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx/ssl:/etc/ssl
+      - ./docker/nginx/snippets:/etc/nginx/snippets
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+      - ./docker/nginx/ssl/dhparam.pem:/etc/nginx/dhparam.pem
+    networks:
+      - privnet
+
+
+  eth-explorer:
+    build:
+      context: ./docker/explorer
+    container_name: eth-explorer
+    depends_on:
+      - eth-node-01
+    expose:
+      - 3000
+    ports:
+      - 3000:3000
+    environment:
+      - TZ=Asia/Bangkok
+    networks:
+      - privnet
+
+networks:
+  privnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/24
+
