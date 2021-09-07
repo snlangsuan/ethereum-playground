@@ -25,7 +25,7 @@ services:
       context: ./docker/node
     container_name: eth-node-02
     entrypoint: /root/start.sh
-    command: "--datadir=/root/.ethereum --bootnodes enode://8299cdb534231de1d01140b77984ab4b632be814ad68365db495d1a1c6cd30ab272e12dfd5bc52d2116754264730fa2eb0d78f6e54cded0687524f8e44376183@10.5.0.100:30303 --networkid 1981 --syncmode full --cache=512 --mine --miner.threads=1 --miner.gasprice 0 --miner.gaslimit 94000000 --unlock 0xd5209aac30af2a12055f8d2f567bdeac41fe4ec0 --password /opt/password.txt --verbosity 6"
+    command: "--datadir=/root/.ethereum --bootnodes enode://8299cdb534231de1d01140b77984ab4b632be814ad68365db495d1a1c6cd30ab272e12dfd5bc52d2116754264730fa2eb0d78f6e54cded0687524f8e44376183@10.5.0.100:30303 --networkid 1981 --syncmode full --mine --miner.threads=1 --miner.gasprice 0 --miner.gaslimit 94000000 --unlock 0xd5209aac30af2a12055f8d2f567bdeac41fe4ec0 --password /opt/password.txt --verbosity 6"
     volumes:
       - ./data/.ethash:/root/.ethash
       - ./data/node-02:/root/.ethereum
@@ -43,7 +43,7 @@ services:
       context: ./docker/node
     container_name: eth-node-03
     entrypoint: /root/start.sh
-    command: "--datadir=/root/.ethereum --bootnodes enode://8299cdb534231de1d01140b77984ab4b632be814ad68365db495d1a1c6cd30ab272e12dfd5bc52d2116754264730fa2eb0d78f6e54cded0687524f8e44376183@10.5.0.100:30303 --networkid 1981 --syncmode full --cache=512 --mine --miner.threads=1 --miner.gasprice 0 --miner.gaslimit 94000000 --unlock 0xcf48e3fa7012cd14afccb5baa8501a3b0401732d --password /opt/password.txt --verbosity 6"
+    command: "--datadir=/root/.ethereum --bootnodes enode://8299cdb534231de1d01140b77984ab4b632be814ad68365db495d1a1c6cd30ab272e12dfd5bc52d2116754264730fa2eb0d78f6e54cded0687524f8e44376183@10.5.0.100:30303 --networkid 1981 --syncmode full --mine --miner.threads=1 --miner.gasprice 0 --miner.gaslimit 94000000 --unlock 0xcf48e3fa7012cd14afccb5baa8501a3b0401732d --password /opt/password.txt --verbosity 6"
     volumes:
       - ./data/.ethash:/root/.ethash
       - ./data/node-03:/root/.ethereum
