@@ -33,6 +33,8 @@ services:
       - ./data/node-02/password.txt:/opt/password.txt
     ports:
       - 30311:30303
+    depends_on:
+      - "eth-node-01"
     environment:
       - TZ=Asia/Bangkok
     networks:
@@ -51,6 +53,8 @@ services:
       - ./data/node-03/password.txt:/opt/password.txt
     ports:
       - 30312:30303
+    depends_on:
+      - "eth-node-01"
     environment:
       - TZ=Asia/Bangkok
     networks:
